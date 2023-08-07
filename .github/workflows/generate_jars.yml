@@ -10,13 +10,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
+    - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
+    - name: Set up JDK 8 and Maven
+      uses: actions/setup-java@cd89f46ac9d01407894225f350157564c9c7cee2 # v3.12.0
+      with:
+        java-version: '8'
+        distribution: 'adopt'
+# Invoke the "github-actions" profile during Maven steps; see <profile> in pom.xml
+# files. This is configured not to build the "cpp-build" module.
+# The "mvn install" command will run by default during the "install" phase by
+# Github Actions, without the profile flag. Here we customize the install phase to
+# use the relevant profile. If we want to build "cpp-build" with Github Action CI
+# it's safe to remove the first line entirely.
     - name: Download JUnit and Mockito JARs
       run: |
-        mkdir -p lib
-        wget -O lib/junit.jar https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar
-        wget -O lib/mockito.jar https://repo1.maven.org/maven2/org/mockito/mockito-core/3.12.4/mockito-core-3.12.4.jar
+        mkdir -p lib1
+        wget -O lib1/junit.jar https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar
+        wget -O lib1/mockito.jar https://repo1.maven.org/maven2/org/mockito/mockito-core/3.12.4/mockito-core-3.12.4.jar
 
+    - name: Test Build Tools with Maven
+      run: |
+        mvn install -P github-actions -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+        mvn -P github-actions test
+    - name: Test Java API with Ant
+      run: |
+        ant clean -f java/build.xml
+        ant jar -f java/build.xml
+        ant junit -f java/build.xml
+    
     - name: Run Ant build
       run: |
         ant clean -f java/build.xml
@@ -27,4 +48,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: generated-jars
-        path: lib/*.jar
+        path: lib1/*.jar
