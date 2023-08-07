@@ -1,0 +1,27 @@
+name: Generate JUnit and Mockito JARs and Build with Ant
+
+on:
+  push:
+    branches:
+      - workflow-for-binaries # Change this to your main branch name
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Download JUnit and Mockito JARs
+      run: |
+        mkdir -p lib
+        wget -O lib/junit.jar https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar
+        wget -O lib/mockito.jar https://repo1.maven.org/maven2/org/mockito/mockito-core/3.12.4/mockito-core-3.12.4.jar
+
+    - name: Run Ant build
+      run: ant
+
+    - name: Upload JARs as artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: generated-jars
+        path: lib/*.jar
