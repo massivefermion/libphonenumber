@@ -25,7 +25,7 @@ jobs:
     - name: Download JUnit and Mockito JARs
       run: |
         mkdir -p java/lib
-        wget -O java/lib/junit.jar https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar
+        wget -O java/lib/junit-4.13.1.jar https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar
         wget -O java/lib/mockito.jar https://repo1.maven.org/maven2/org/mockito/mockito-core/3.12.4/mockito-core-3.12.4.jar
 
     - name: Test Build Tools with Maven
