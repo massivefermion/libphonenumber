@@ -18,7 +18,10 @@ jobs:
         wget -O lib/mockito.jar https://repo1.maven.org/maven2/org/mockito/mockito-core/3.12.4/mockito-core-3.12.4.jar
 
     - name: Run Ant build
-      run: ant
+      run: |
+        ant clean -f java/build.xml
+        ant jar -f java/build.xml
+        ant junit -f java/build.xml
 
     - name: Upload JARs as artifacts
       uses: actions/upload-artifact@v2
