@@ -24,10 +24,15 @@ jobs:
 # it's safe to remove the first line entirely.
     - name: Download JUnit and Mockito JARs
       run: |
-        mkdir -p java/lib
-        wget -O java/lib/junit-4.13.1.jar https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar
-        wget -O java/lib/mockito.jar https://repo1.maven.org/maven2/org/mockito/mockito-core/3.12.4/mockito-core-3.12.4.jar
-
+        mkdir -p lib
+        curl -LJO https://repo.maven.apache.org/maven2/junit/junit/4.13.1/junit-4.13.1.jar
+        curl -LJO https://repo.maven.apache.org/maven2/org/mockito/mockito-all/1.10.19/mockito-all-1.10.19.jar
+        mv junit-4.13.1.jar mockito-all-1.10.19.jar lib/
+    - name: Upload JARs as artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: generated-jars
+        path: java/lib/*.jar
     - name: Test Build Tools with Maven
       run: |
         mvn install -P github-actions -DskipTests=true -Dmaven.javadoc.skip=true -B -V
@@ -44,8 +49,4 @@ jobs:
         ant jar -f java/build.xml
         ant junit -f java/build.xml
 
-    - name: Upload JARs as artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: generated-jars
-        path: java/lib/*.jar
+    
