@@ -24,10 +24,10 @@ jobs:
 # it's safe to remove the first line entirely.
     - name: Download JUnit and Mockito JARs
       run: |
-        mkdir -p lib
+        mkdir -p java/lib
         curl -LJO https://repo.maven.apache.org/maven2/junit/junit/4.13.1/junit-4.13.1.jar
         curl -LJO https://repo.maven.apache.org/maven2/org/mockito/mockito-all/1.10.19/mockito-all-1.10.19.jar
-        mv junit-4.13.1.jar mockito-all-1.10.19.jar lib/
+        mv junit-4.13.1.jar mockito-all-1.10.19.jar java/lib/
     - name: Upload JARs as artifacts
       uses: actions/upload-artifact@v2
       with:
