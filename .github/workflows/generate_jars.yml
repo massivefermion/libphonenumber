@@ -24,9 +24,9 @@ jobs:
 # it's safe to remove the first line entirely.
     - name: Download JUnit and Mockito JARs
       run: |
-        mkdir -p java/lib1
-        wget -O java/lib1/junit.jar https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar
-        wget -O java/lib1/mockito.jar https://repo1.maven.org/maven2/org/mockito/mockito-core/3.12.4/mockito-core-3.12.4.jar
+        mkdir -p java/lib
+        wget -O java/lib/junit.jar https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar
+        wget -O java/lib/mockito.jar https://repo1.maven.org/maven2/org/mockito/mockito-core/3.12.4/mockito-core-3.12.4.jar
 
     - name: Test Build Tools with Maven
       run: |
@@ -48,4 +48,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: generated-jars
-        path: java/lib1/*.jar
+        path: java/lib/*.jar
